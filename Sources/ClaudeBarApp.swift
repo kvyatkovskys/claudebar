@@ -15,6 +15,7 @@ struct ClaudeBarApp: App {
                     if appState.isAuthenticated {
                         appState.startPolling()
                     }
+                    await appState.checkForUpdate()
                 }
         } label: {
             HStack(spacing: 4) {

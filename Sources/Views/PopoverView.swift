@@ -37,6 +37,9 @@ private struct UsageDetailView: View {
                     .foregroundStyle(.secondary)
                     .padding(20)
             }
+            if let update = state.availableUpdate {
+                updateBanner(version: update.version, url: update.url)
+            }
             footer
         }
     }
@@ -144,6 +147,23 @@ private struct UsageDetailView: View {
             }
             .frame(height: 8)
         }
+    }
+
+    private func updateBanner(version: String, url: String) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: "arrow.up.circle.fill")
+                .foregroundStyle(.blue)
+                .font(.caption)
+            Text("v\(version) available")
+                .font(.caption2)
+            Spacer()
+            Link("Download", destination: URL(string: url)!)
+                .font(.caption2)
+                .foregroundStyle(.blue)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+        .background(.blue.opacity(0.08))
     }
 
     private var footer: some View {

@@ -17,6 +17,9 @@ final class AppState {
     // MARK: - UI State
     var showingSettings = false
 
+    // MARK: - Update State
+    var availableUpdate: (version: String, url: String)?
+
     // MARK: - Services
     private let keychain: KeychainService
     private var pollTimer: Timer?
@@ -131,6 +134,12 @@ final class AppState {
     func stopPolling() {
         pollTimer?.invalidate()
         pollTimer = nil
+    }
+
+    // MARK: - Update Check
+
+    func checkForUpdate() async {
+        availableUpdate = await UpdateChecker.checkForUpdate()
     }
 }
 
