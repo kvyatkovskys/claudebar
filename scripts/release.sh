@@ -47,7 +47,7 @@ gh release create "v$VERSION" "$ZIP_FILE" \
 Download `ClaudeBar.zip`, unzip, then run:
 
 ```bash
-xattr -cr ClaudeBar.app
+xattr -c -r ClaudeBar.app
 mv ClaudeBar.app /Applications/
 ```
 NOTES

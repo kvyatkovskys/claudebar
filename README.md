@@ -24,11 +24,11 @@ A native macOS menu bar app that shows your Claude.ai usage at a glance.
 Download the latest `.zip` from [Releases](https://github.com/chiliec/claudebar/releases), unzip, then:
 
 ```bash
-xattr -cr ClaudeBar.app
+xattr -c -r ClaudeBar.app
 mv ClaudeBar.app /Applications/
 ```
 
-The `xattr -cr` command removes the macOS quarantine flag — required for apps distributed outside the App Store.
+The `xattr -c -r` command removes the macOS quarantine flag — required for apps distributed outside the App Store.
 
 ### Build from source
 
