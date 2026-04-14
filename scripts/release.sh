@@ -34,9 +34,9 @@ swift test 2>&1 | tail -3
 
 echo "==> Committing version bump"
 git add Sources/Services/UpdateChecker.swift Sources/Info.plist
-git commit -m "release: v$VERSION"
-git tag "v$VERSION"
-git push origin main --tags
+git diff --cached --quiet || git commit -m "release: v$VERSION"
+git tag -f "v$VERSION"
+git push origin main --tags --force
 
 echo "==> Creating GitHub release"
 gh release create "v$VERSION" "$ZIP_FILE" \
