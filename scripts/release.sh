@@ -41,6 +41,16 @@ git push origin main --tags
 echo "==> Creating GitHub release"
 gh release create "v$VERSION" "$ZIP_FILE" \
     --title "ClaudeBar v$VERSION" \
-    --generate-notes
+    --notes "$(cat <<'NOTES'
+### Install
+
+Download `ClaudeBar.zip`, unzip, then run:
+
+```bash
+xattr -cr ClaudeBar.app
+mv ClaudeBar.app /Applications/
+```
+NOTES
+)"
 
 echo "==> Done! Release: https://github.com/chiliec/claudebar/releases/tag/v$VERSION"

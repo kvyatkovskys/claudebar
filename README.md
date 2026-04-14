@@ -21,6 +21,17 @@ A native macOS menu bar app that shows your Claude.ai usage at a glance.
 
 ## Install
 
+Download the latest `.zip` from [Releases](https://github.com/chiliec/claudebar/releases), unzip, then:
+
+```bash
+xattr -cr ClaudeBar.app
+mv ClaudeBar.app /Applications/
+```
+
+The `xattr -cr` command removes the macOS quarantine flag — required for apps distributed outside the App Store.
+
+### Build from source
+
 ```bash
 git clone https://github.com/chiliec/claudebar.git
 cd claudebar
