@@ -85,25 +85,14 @@ struct SessionKeyInputView: View {
 
             HStack {
                 Spacer()
-                if #available(macOS 26.0, *) {
-                    Button {
-                        Task { await state.validateAndFetchOrgs(sessionKey: keyInput) }
-                    } label: {
-                        Text(buttonLabel)
-                    }
-                    .buttonStyle(.glassProminent)
-                    .keyboardShortcut(.defaultAction)
-                    .disabled(keyInput.isEmpty || state.isLoading)
-                } else {
-                    Button {
-                        Task { await state.validateAndFetchOrgs(sessionKey: keyInput) }
-                    } label: {
-                        Text(buttonLabel)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .keyboardShortcut(.defaultAction)
-                    .disabled(keyInput.isEmpty || state.isLoading)
+                Button {
+                    Task { await state.validateAndFetchOrgs(sessionKey: keyInput) }
+                } label: {
+                    Text(buttonLabel)
                 }
+                .modifier(ProminentButtonModifier())
+                .keyboardShortcut(.defaultAction)
+                .disabled(keyInput.isEmpty || state.isLoading)
             }
 
             if showQuitButton {

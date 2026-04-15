@@ -21,11 +21,10 @@ public struct PopoverView: View {
         }
         .frame(width: 320)
         .task {
-            state.loadCredentials()
-            if state.isAuthenticated {
-                state.startPolling()
-            }
             await state.checkForUpdate()
+        }
+        .onDisappear {
+            state.showingSettings = false
         }
     }
 }

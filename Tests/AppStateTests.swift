@@ -178,7 +178,9 @@ struct AppStateTests {
         #expect(AppError.sessionExpired.message == "Session expired — update your key")
         #expect(AppError.rateLimited.message == "Rate limited — will retry")
         #expect(AppError.network("Connection failed").message == "Connection failed")
-        #expect(AppError.api(.httpError(500)).message == "API error: httpError(500)")
+        #expect(AppError.api(.httpError(500)).message == "API error: HTTP 500")
+        #expect(APIError.invalidURL.displayMessage == "Invalid URL")
+        #expect(APIError.invalidResponse.displayMessage == "Invalid response")
     }
 
     // MARK: - Organization Selection

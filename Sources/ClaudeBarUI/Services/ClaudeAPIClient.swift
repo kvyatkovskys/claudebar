@@ -88,6 +88,16 @@ public enum APIError: Error, Equatable {
     case sessionExpired
     case rateLimited
     case httpError(Int)
+
+    public var displayMessage: String {
+        switch self {
+        case .invalidURL: return String(localized: "apiError.invalidURL", bundle: .module)
+        case .invalidResponse: return String(localized: "apiError.invalidResponse", bundle: .module)
+        case .sessionExpired: return String(localized: "apiError.sessionExpired", bundle: .module)
+        case .rateLimited: return String(localized: "apiError.rateLimited", bundle: .module)
+        case .httpError(let code): return String(localized: "apiError.httpError \(code)", bundle: .module)
+        }
+    }
 }
 
 extension ISO8601DateFormatter {

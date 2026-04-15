@@ -254,6 +254,9 @@ struct UsageDetailView: View {
     private static let shortDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEE"
+        if let langCode = Bundle.module.preferredLocalizations.first {
+            formatter.locale = Locale(identifier: langCode)
+        }
         return formatter
     }()
 

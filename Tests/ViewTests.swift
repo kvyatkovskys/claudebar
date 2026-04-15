@@ -2,14 +2,6 @@ import Testing
 import ViewInspector
 @testable import ClaudeBarUI
 
-// MARK: - Inspectable Conformances
-
-extension PopoverView: @retroactive Inspectable {}
-extension SetupView: @retroactive Inspectable {}
-extension SessionExpiredView: @retroactive Inspectable {}
-extension RingProgressView: @retroactive Inspectable {}
-extension SettingsView: @retroactive Inspectable {}
-
 // MARK: - PopoverView Tests
 
 @MainActor
@@ -128,8 +120,8 @@ struct SetupViewTests {
         let inspected = try view.inspect()
 
         _ = try inspected.find(text: "Select organization:")
-        _ = try inspected.find(button: "Personal")
-        _ = try inspected.find(button: "Work")
+        _ = try inspected.find(text: "Personal")
+        _ = try inspected.find(text: "Work")
     }
 
     @Test func hidesOrgSelectionForSingleOrg() throws {

@@ -12,23 +12,13 @@ public struct SettingsView: View {
                 Text("settings.title", bundle: .module)
                     .font(.headline)
                 Spacer()
-                if #available(macOS 26.0, *) {
-                    Button {
-                        state.showingSettings = false
-                    } label: {
-                        Text("action.done", bundle: .module)
-                    }
-                    .buttonStyle(.glass)
-                    .controlSize(.small)
-                } else {
-                    Button {
-                        state.showingSettings = false
-                    } label: {
-                        Text("action.done", bundle: .module)
-                    }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
+                Button {
+                    state.showingSettings = false
+                } label: {
+                    Text("action.done", bundle: .module)
                 }
+                .modifier(BorderedButtonModifier())
+                .controlSize(.small)
             }
 
             // Session status

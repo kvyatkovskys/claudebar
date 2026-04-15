@@ -28,6 +28,13 @@ public final class AppState {
 
     public init(keychain: KeychainService = KeychainService()) {
         self.keychain = keychain
+        loadCredentials()
+        if isAuthenticated {
+            // Defer polling start to next run loop to avoid publishing changes during init
+            Task { @MainActor [weak self] in
+                self?.startPolling()
+            }
+        }
     }
 
     // MARK: - Computed Display Values
@@ -160,7 +167,7 @@ public enum AppError: Equatable {
         switch self {
         case .sessionExpired: return String(localized: "error.sessionExpired", bundle: .module)
         case .rateLimited: return String(localized: "error.rateLimited", bundle: .module)
-        case .api(let e): return String(localized: "error.api \(String(describing: e))", bundle: .module)
+        case .api(let e): return String(localized: "error.api \(e.displayMessage)", bundle: .module)
         case .network(let msg): return msg
         }
     }
