@@ -186,7 +186,7 @@ struct UsageDetailView: View {
                 .foregroundStyle(.secondary)
 
             slimBar(
-                label: String(localized: "usage.creditsUsed \(String(format: "%.0f", used)) \(String(format: "%.0f", limit))", bundle: .module),
+                label: String(localized: "usage.creditsUsed \(String(format: "%.2f", used / 100)) \(String(format: "%.0f", limit / 100))", bundle: .module),
                 utilization: min(used / limit, 1.0),
                 resetDate: nil,
                 color: .teal
@@ -235,7 +235,7 @@ struct UsageDetailView: View {
     private func tierLabel(_ usage: UsageResponse) -> String {
         if usage.sevenDayOpus != nil {
             if let extra = usage.extraUsage, let limit = extra.monthlyLimit {
-                return String(localized: "tier.maxWithLimit \(Int(limit))", bundle: .module)
+                return String(localized: "tier.maxWithLimit \(Int(limit / 100))", bundle: .module)
             }
             return String(localized: "tier.max", bundle: .module)
         }
