@@ -1,0 +1,116 @@
+import SwiftUI
+
+struct SessionKeyInputView: View {
+    let state: AppState
+    let title: String
+    let subtitle: String
+    let buttonLabel: String
+    let titleIcon: String?
+    let titleColor: Color?
+    let showQuitButton: Bool
+
+    @State private var keyInput = ""
+    @State private var selectedOrgId: String?
+
+    init(
+        state: AppState,
+        title: String,
+        subtitle: String,
+        buttonLabel: String,
+        titleIcon: String? = nil,
+        titleColor: Color? = nil,
+        showQuitButton: Bool = false
+    ) {
+        self.state = state
+        self.title = title
+        self.subtitle = subtitle
+        self.buttonLabel = buttonLabel
+        self.titleIcon = titleIcon
+        self.titleColor = titleColor
+        self.showQuitButton = showQuitButton
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            if let icon = titleIcon {
+                Label(title, systemImage: icon)
+                    .font(.headline)
+                    .foregroundStyle(titleColor ?? .primary)
+            } else {
+                Text(title)
+                    .font(.headline)
+            }
+
+            Text(.init(subtitle))
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            TextField("", text: $keyInput, prompt: Text("setup.sessionKeyPlaceholder", bundle: .module))
+                .textFieldStyle(.roundedBorder)
+                .font(.system(size: 13, design: .monospaced))
+                .onSubmit {
+                    guard !keyInput.isEmpty, !state.isLoading else { return }
+                    Task { await state.validateAndFetchOrgs(sessionKey: keyInput) }
+                }
+
+            if state.organizations.count > 1 {
+                Text("setup.selectOrganization", bundle: .module)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Picker("", selection: $selectedOrgId) {
+                    Text("setup.chooseOrganization", bundle: .module)
+                        .tag(nil as String?)
+                    ForEach(state.organizations, id: \.uuid) { org in
+                        Text(org.name).tag(org.uuid as String?)
+                    }
+                }
+                .labelsHidden()
+                .onChange(of: selectedOrgId) { _, newValue in
+                    guard let orgId = newValue,
+                          let org = state.organizations.first(where: { $0.uuid == orgId }) else { return }
+                    Task { await state.selectOrganization(org) }
+                }
+            }
+
+            if state.isLoading {
+                ProgressView()
+                    .scaleEffect(0.8)
+            }
+
+            if let error = state.error {
+                Text(error.message)
+                    .font(.subheadline)
+                    .foregroundStyle(.red)
+            }
+
+            HStack {
+                Spacer()
+                if #available(macOS 26.0, *) {
+                    Button {
+                        Task { await state.validateAndFetchOrgs(sessionKey: keyInput) }
+                    } label: {
+                        Text(buttonLabel)
+                    }
+                    .buttonStyle(.glassProminent)
+                    .keyboardShortcut(.defaultAction)
+                    .disabled(keyInput.isEmpty || state.isLoading)
+                } else {
+                    Button {
+                        Task { await state.validateAndFetchOrgs(sessionKey: keyInput) }
+                    } label: {
+                        Text(buttonLabel)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .keyboardShortcut(.defaultAction)
+                    .disabled(keyInput.isEmpty || state.isLoading)
+                }
+            }
+
+            if showQuitButton {
+                Divider()
+                QuitButton(foregroundStyle: .secondary)
+            }
+        }
+        .padding(16)
+    }
+}

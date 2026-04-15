@@ -5,57 +5,73 @@ public struct SettingsView: View {
     public let state: AppState
 
     public init(state: AppState) { self.state = state }
-    @Environment(\.dismiss) private var dismiss
-
+    
     public var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
-                Text("Settings")
+                Text("settings.title", bundle: .module)
                     .font(.headline)
                 Spacer()
-                Button("Done") { dismiss() }
-                    .buttonStyle(.plain)
-                    .foregroundStyle(.blue)
-                    .font(.caption)
+                if #available(macOS 26.0, *) {
+                    Button {
+                        state.showingSettings = false
+                    } label: {
+                        Text("action.done", bundle: .module)
+                    }
+                    .buttonStyle(.glass)
+                    .controlSize(.small)
+                } else {
+                    Button {
+                        state.showingSettings = false
+                    } label: {
+                        Text("action.done", bundle: .module)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                }
             }
 
             // Session status
-            GroupBox("Session") {
+            GroupBox {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Circle()
                             .fill(state.isAuthenticated ? .green : .red)
                             .frame(width: 8, height: 8)
-                        Text(state.isAuthenticated ? "Connected" : "Not connected")
-                            .font(.caption)
+                        Text(state.isAuthenticated
+                             ? String(localized: "settings.connected", bundle: .module)
+                             : String(localized: "settings.notConnected", bundle: .module))
+                            .font(.subheadline)
                     }
-                    Button("Update Session Key") {
+                    Button {
                         state.clearCredentials()
+                    } label: {
+                        Text("settings.updateSessionKey", bundle: .module)
                     }
-                    .font(.caption)
+                    .font(.subheadline)
                     .buttonStyle(.bordered)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(4)
+            } label: {
+                Text("settings.session", bundle: .module)
             }
 
             // Launch at login
-            GroupBox("General") {
+            GroupBox {
                 VStack(alignment: .leading, spacing: 8) {
                     LaunchAtLoginToggle()
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(4)
+            } label: {
+                Text("settings.general", bundle: .module)
             }
 
             Spacer()
 
-            Button("Quit ClaudeBar") {
-                NSApplication.shared.terminate(nil)
-            }
-            .font(.caption)
-            .buttonStyle(.plain)
-            .foregroundStyle(.red)
+            Divider()
+            QuitButton()
         }
         .padding(16)
         .frame(width: 320, height: 280)
@@ -66,19 +82,21 @@ struct LaunchAtLoginToggle: View {
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
 
     var body: some View {
-        Toggle("Launch at login", isOn: $launchAtLogin)
-            .font(.caption)
-            .onChange(of: launchAtLogin) { _, newValue in
-                do {
-                    if newValue {
-                        try SMAppService.mainApp.register()
-                    } else {
-                        try SMAppService.mainApp.unregister()
-                    }
-                } catch {
-                    launchAtLogin = !newValue // revert on failure
+        Toggle(isOn: $launchAtLogin) {
+            Text("settings.launchAtLogin", bundle: .module)
+        }
+        .font(.subheadline)
+        .onChange(of: launchAtLogin) { _, newValue in
+            do {
+                if newValue {
+                    try SMAppService.mainApp.register()
+                } else {
+                    try SMAppService.mainApp.unregister()
                 }
+            } catch {
+                launchAtLogin = !newValue // revert on failure
             }
+        }
     }
 }
 
