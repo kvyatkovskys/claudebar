@@ -29,7 +29,7 @@ if [ -z "$CODE_SIGN_IDENTITY" ]; then
 fi
 
 echo "Signing with: $CODE_SIGN_IDENTITY"
-codesign --force --sign "$CODE_SIGN_IDENTITY" "$BUNDLE_DIR"
+codesign --force --sign "$CODE_SIGN_IDENTITY" --entitlements Sources/ClaudeBar/ClaudeBar.entitlements "$BUNDLE_DIR"
 
 echo "Done: $BUNDLE_DIR"
 echo "To install: cp -r $BUNDLE_DIR /Applications/"

@@ -16,5 +16,5 @@ if [ -z "$CODE_SIGN_IDENTITY" ]; then
 fi
 
 swift build
-codesign --force --sign "$CODE_SIGN_IDENTITY" ".build/debug/$APP_NAME"
+codesign --force --sign "$CODE_SIGN_IDENTITY" --entitlements Sources/ClaudeBar/ClaudeBar.entitlements ".build/debug/$APP_NAME"
 ".build/debug/$APP_NAME"
