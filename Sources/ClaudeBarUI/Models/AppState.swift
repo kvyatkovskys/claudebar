@@ -158,9 +158,9 @@ public enum AppError: Equatable {
 
     public var message: String {
         switch self {
-        case .sessionExpired: return "Session expired — update your key"
-        case .rateLimited: return "Rate limited — will retry"
-        case .api(let e): return "API error: \(e)"
+        case .sessionExpired: return String(localized: "error.sessionExpired", bundle: .module)
+        case .rateLimited: return String(localized: "error.rateLimited", bundle: .module)
+        case .api(let e): return String(localized: "error.api \(String(describing: e))", bundle: .module)
         case .network(let msg): return msg
         }
     }

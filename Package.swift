@@ -3,6 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "ClaudeBar",
+    defaultLocalization: "en",
     platforms: [.macOS(.v14)],
     products: [
         .executable(name: "ClaudeBar", targets: ["ClaudeBar"])
@@ -12,7 +13,8 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "ClaudeBarUI"
+            name: "ClaudeBarUI",
+            resources: [.process("Resources")]
         ),
         .executableTarget(
             name: "ClaudeBar",
